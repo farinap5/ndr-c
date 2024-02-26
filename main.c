@@ -69,7 +69,10 @@ int main(int argc, char **argv) {
   int c = 0;
   while (r) {
     c++;
-    if (c > 100)
+    if (c > 100) 
+  /*  
+    Keep to avoid breakin everything. 
+  */
       break;
     
     printf("PC: %02x  AC: %02x |", m.pc, m.ac);
