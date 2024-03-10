@@ -1,7 +1,7 @@
 ; Comment
 
 ADDR ; start addressing section
-    8 $end1
+    50 $end1
     89 $end2
 END
 
@@ -12,8 +12,14 @@ DATA ; start data section
 END 
 
 TEXT
-    LDA $end1; aaaaa
-    STA $end1;
-    
-    :batata
+    STA 09
+    :aaaa
+    STA $end1
+    STA 09
+    STA 09
+    STA 09
+    STA 09
+    STA 09
+    STA 09
+    JMP :aaaa
 END
