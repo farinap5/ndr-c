@@ -47,11 +47,15 @@ int main(int argc, char **argv) {
     }
 
     fwrite(magic, 4, sizeof(__uint8_t), out);
-    fwrite(mem, 256, sizeof(__uint8_t), out);
-    /*for (int i = 0; i < 256; i++) {
-        fwrite(mem[i], 1, sizeof(__uint8_t), out);
-    }*/
+    //fwrite(mem, 256, sizeof(__uint8_t), out);
+    for (int i = 0; i < 256; i++) {
+        unsigned char *data = &mem[i];
+        fwrite(data, 1, sizeof(__uint8_t), out);
+        unsigned char null = '\0';
+        fwrite(&null, 1, sizeof(__uint8_t), out);
+    }
     fclose(out);
+    free(mem);
 
   return 0;
 }
