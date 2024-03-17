@@ -120,9 +120,9 @@ int run_machine_code(Machine m) {
   while (r) {
     c++;
     if (c > 100) 
-  /*  
-    Keep to avoid breakin everything. 
-  */
+    /*  
+      Keep to avoid breakin everything. 
+    */
       break;
     
     printf("PC: %02x  AC: %02x |", m.pc, m.ac);
@@ -165,7 +165,6 @@ int run_machine_code(Machine m) {
       default:
         printf(" Not A Instruction\n");
         return 1;
-        break;
     }
   }
   return 0;

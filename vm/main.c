@@ -57,6 +57,7 @@ int main(int argc, char **argv) {
   }
   fclose(file);
   
+  // call the machine
   if (run_machine_code(m)) {
     printf("Exit with error.");
   }
