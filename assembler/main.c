@@ -5,9 +5,37 @@
 #include "util.h"
 #include "table/table.h"
 
-int main(void) {
+void help() {
+    printf("aaa\n");
+}
+
+int main(int argc, char **argv) {
     FILE *f;
-    f = fopen("assembly.as", "r");
+    FILE *out;
+    __uint8_t magic[4] = {0x03, 0xae, 0x44, 0x54};
+    char *foutname = "out.mem";
+    char *fname = "assembly.as";
+
+    if (argc > 1) {
+        for (int i = 0; i < argc; i++) {
+            if (strcmp("-h", argv[i]) == 0 || strcmp("--help", argv[i]) == 0) {
+                help();
+                return 0;
+            } else if (strcmp("-o", argv[i]) == 0 || strcmp("--output", argv[i]) == 0) {
+                i++;
+                foutname = argv[i];
+            } else  {
+                fname = argv[i];
+            }
+        }
+    }
+
+    f = fopen(fname, "r");
+    if (f == NULL) {
+        printf("Error: No such file %s\n", fname);
+        return 1;
+    }
+    
     /*
         Database to hold the defs where 
         $var (a variable with arbitrary name) = 0x10 (a arbitrary address)
@@ -297,5 +325,19 @@ int main(void) {
    
     Dump(mem);
     fclose(f);
+
+    out = fopen(foutname, "w");
+    if (out == NULL) {
+        printf("Error: while opening %s\n", foutname);
+        return 1;
+    }
+
+    fwrite(magic, 4, sizeof(__uint8_t), out);
+    fwrite(mem, 256, sizeof(__uint8_t), out);
+    /*for (int i = 0; i < 256; i++) {
+        fwrite(mem[i], 1, sizeof(__uint8_t), out);
+    }*/
+    fclose(out);
+
   return 0;
 }
