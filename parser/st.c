@@ -1,3 +1,5 @@
+// usando esse arquivo como referência pro tokenizer
+
 #include <string.h>
 char * strtok(char *s, const char *delim) {
 	static char *last;
