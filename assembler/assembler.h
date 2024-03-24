@@ -10,7 +10,7 @@
     The assembler must receive a file descriptor of a file.
     It retunts the memory.
 */
-__uint8_t *assembler(FILE *f) {
+__uint8_t *assembler(FILE *f, int v) {
     __uint8_t magic[4] = {0x03, 0xae, 0x44, 0x54};
     
     /*
@@ -47,14 +47,16 @@ __uint8_t *assembler(FILE *f) {
         clean_line(line);
         char *token = strtok(line, " ");
         if (strcmp(token, "ADDR") == 0) { // read the header of the section (ADDR)
-            printf("ADDR section started\n");
+            if (v>2)
+                printf("ADDR section started\n");
             while (getline(&line, &lineSize, f) != -1) {
                 cLine++;
                 clean_line(line);
                 
                 char *end = strtok(line, " ");
                 if (strcmp(end, "END") == 0) { // end the section
-                    printf("ADDR section end\n");
+                    if (v>1)
+                        printf("ADDR section end\n");
                     break;
                 }
                 char *val = strtok(NULL, " ");
@@ -62,7 +64,8 @@ __uint8_t *assembler(FILE *f) {
                     printf("Error line %d: start definition with $\n", cLine);
                     return NULL;
                 } else {
-                    printf("    DEF %02x %s\n", (__uint8_t)strtol(end, NULL, 16), val);
+                    if (v>1)
+                        printf("    DEF %02x %s\n", (__uint8_t)strtol(end, NULL, 16), val);
                     DBAdd(defDB, val, (__uint8_t)strtol(end, NULL, 16));
                 }
             }
@@ -76,23 +79,27 @@ __uint8_t *assembler(FILE *f) {
         clean_line(line);
         char *token = strtok(line, " ");
         if (strcmp(token, "DATA") == 0) {
-            printf("DATA section started\n");
+            if (v>1)
+                printf("DATA section started\n");
             while (getline(&line, &lineSize, f) != -1) {
                 clean_line(line);
                 
                 char *end = strtok(line, " ");
                 if (strcmp(end, "END") == 0) {
-                    printf("DATA section end\n");
+                    if (v>1)
+                        printf("DATA section end\n");
                     break;
                 }
                 __uint8_t addr;
                 char *val = strtok(NULL, " ");
                 if (val[0] == '$') {
                     addr = DBGet(defDB, val);
-                    printf("    DB %02x %s=%02x\n", (__uint8_t)strtol(end, NULL, 16), val, addr);
+                    if (v>1)
+                        printf("    DB %02x %s=%02x\n", (__uint8_t)strtol(end, NULL, 16), val, addr);
                 } else {
                     addr = (__uint8_t)strtol(val, NULL, 16);
-                    printf("    DB %02x %02x\n", (__uint8_t)strtol(end, NULL, 16), addr);
+                    if (v>1)
+                        printf("    DB %02x %02x\n", (__uint8_t)strtol(end, NULL, 16), addr);
                 }
                 mem[addr] = (__uint8_t)strtol(end, NULL, 16);
             }
@@ -106,14 +113,16 @@ __uint8_t *assembler(FILE *f) {
         clean_line(line);
         char *token = strtok(line, " ");
         if (strcmp(token, "TEXT") == 0) {
-            printf("TEXT section started\n");
+            if (v>1)
+                printf("TEXT section started\n");
 
             while (getline(&line, &lineSize, f) != -1) {
                 clean_line(line);
                 
                 char *token = strtok(line, " ");
                 if (strcmp(token, "END") == 0) {
-                    printf("DATA section end\n");
+                    if (v>1)
+                        printf("DATA section end\n");
                     break;
                 } else if (strcmp(token, "STA") == 0) {
                     insCount += 2;
@@ -139,7 +148,8 @@ __uint8_t *assembler(FILE *f) {
                     insCount += 1;
                 } else if (token[0] == ':') {
                     int real_addrs = (insCount == 0) ? insCount : insCount + 1;
-                    printf("label %s to %d byte\n", token, real_addrs);
+                    if (v>1)
+                        printf("label %s to %d byte\n", token, real_addrs);
                     DBAdd(labelDB, token, real_addrs); // add the labels address to the database
                 } else if (strcmp(token, "HLT") == 0) {
                     insCount += 1;
@@ -148,8 +158,8 @@ __uint8_t *assembler(FILE *f) {
             break;
         }
     }
-
-    printf("final size: %d\n\n\n\n\n", insCount);
+    if (v>1)
+        printf("-> TEXT area final size: %d\n\n", insCount);
     
 
 
@@ -160,7 +170,8 @@ __uint8_t *assembler(FILE *f) {
         clean_line(line);
         char *token = strtok(line, " ");
         if (strcmp(token, "TEXT") == 0) {
-            printf("TEXT section started\n");
+            if (v>1)
+                printf("TEXT section started\n");
 
             int insCount = 0;
             while (getline(&line, &lineSize, f) != -1) {
@@ -168,17 +179,20 @@ __uint8_t *assembler(FILE *f) {
                 
                 char *token = strtok(line, " ");
                 if (strcmp(token, "END") == 0) {
-                    printf("Text section end\n");
+                    if (v>1)
+                        printf("Text section end\n");
                     break;
                 } else if (strcmp(token, "STA") == 0) {
                     __uint8_t addr;
                     token = strtok(NULL, " "); // get the next token after " "
                     if (token[0] == '$') {
                         addr = DBGet(defDB, token);
-                        printf("    STA %s=%02x\n", token, addr);
+                        if (v>1)
+                            printf("    STA %s=%02x\n", token, addr);
                     } else {
                         addr = (__uint8_t)strtol(token, NULL, 16);
-                        printf("    STA %02x\n", addr);
+                        if (v>1)
+                            printf("    STA %02x\n", addr);
                     }
                     mem[address_index] = 0x10;
                     address_index++;
@@ -189,10 +203,12 @@ __uint8_t *assembler(FILE *f) {
                     token = strtok(NULL, " ");
                     if (token[0] == '$') {
                         addr = DBGet(defDB, token);
-                        printf("    LDA %s=%02x\n", token, addr);
+                        if (v>1)
+                            printf("    LDA %s=%02x\n", token, addr);
                     } else {
                         addr = (__uint8_t)strtol(token, NULL, 16);
-                        printf("    LDA %02x\n", addr);
+                        if (v>1)
+                            printf("    LDA %02x\n", addr);
                     }
                     mem[address_index] = 0x20;
                     address_index++;
@@ -203,7 +219,8 @@ __uint8_t *assembler(FILE *f) {
                     token = strtok(NULL, " ");
                     if (token[0] == '$') {
                         addr = DBGet(defDB, token);
-                        printf("    ADD %s=%02x\n", token, addr);
+                        if (v>1)
+                            printf("    ADD %s=%02x\n", token, addr);
                     } else {
                         addr = (__uint8_t)strtol(token, NULL, 16);
                         printf("    ADD %02x\n", addr);

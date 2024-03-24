@@ -1,11 +1,15 @@
 #ifndef MACHINE_H
 #define MACHINE_H
 
+#define min(x, y) (((x) < (y)) ? (x) : (y))
+#define max(x, y) (((x) > (y)) ? (x) : (y))
+
 struct Machine {
   uint8_t mem[256];
   uint8_t ac;
   uint8_t pc;
 } typedef Machine;
+
 
 uint8_t N(Machine *machine) {
   if (machine->ac < 0 || machine->ac > 128)
@@ -29,6 +33,22 @@ void Dump(Machine *m) {
     }
     printf("\n");
   }
+}
+
+void DumpMemData(Machine *m) {
+  int c = 0;
+  for (int i = max(m->pc-4, 0); i < m->pc; i++) {
+    printf("%02x ", m->mem[i]);
+    c++;
+  }
+  printf("<%02x> ", m->mem[m->pc]);
+
+  int k = min(m->pc + (8-c)+1, 255);
+  for (int i = m->pc+1; i < k; i++) {
+    printf("%02x ", m->mem[i]);
+    c++;
+  }
+  printf("\n");
 }
 
 void STA(Machine *machine) {
@@ -114,7 +134,7 @@ void JZ(Machine* machine) {
   }
 }
 
-int run_machine_code(Machine m) {
+int run_machine_code(Machine m, int v) {
   int r = 1;
   int c = 0;
   while (r) {
@@ -124,10 +144,10 @@ int run_machine_code(Machine m) {
       Keep to avoid breakin everything. 
     */
       break;
-    
+    DumpMemData(&m);
     printf("PC: %02x  AC: %02x |", m.pc, m.ac);
+
     switch (m.mem[m.pc]) {
-      //printf("-> pc %02x\n",m.pc);
       case 00:
         m.pc++;
         break;

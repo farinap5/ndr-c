@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
         return 1;
     }
     
-    __uint8_t *mem = assembler(f);
+    __uint8_t *mem = assembler(f,2);
    
     Dump(mem);
     fclose(f);
