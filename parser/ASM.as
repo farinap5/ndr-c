@@ -13,9 +13,11 @@ DATA
 END
 
 TEXT
-   LDA $add3
-   ADD $add2
-   ADD $add1
-   ADD $add0
-         HLT
+    LDA $add3
+    ADD $add2
+    NOT
+    ADD $add1
+    NOT
+    ADD $add0
+    HLT
 END

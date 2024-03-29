@@ -9,16 +9,29 @@ ARCHT := $(shell uname -m)
 UNAMEP:= $(shell uname -smr)
 
 CC=gcc
+RNAME := $(shell cat /dev/random | head -c 32 | md5sum | head -c 12)
 NM="ndrc"
 all: help
 
 ## Run
-run: ## Build project in volatile mode
-	@echo "Test"
+run: ## Build and run. Use FILE="math file".
+	@echo "-> Compiling"
+	@cd vm;$(CC) -o ../comp/ndrvm main.c
+	@cd assembler;$(CC) -o ../comp/ndrasm main.c
+	@cd parser;$(CC) -o ../comp/parser main.c
+	@echo "#########-> Running Parser"
+	@comp/parser -f $(FILE) -o comp/$(RNAME).as
+	@echo "#########-> Running Assembler"
+	@comp/ndrasm comp/$(RNAME).as -o comp/$(RNAME).mem
+	@echo "#########-> Running Virtual Machine"
+	@comp/ndrvm -f comp/$(RNAME).mem
+	
 
 ## Build
-build: ## Build project and and link all files (run & clear)
-	@echo "Test"
+build: ## Build project and and link all files 
+	@cd vm;$(CC) -o ../comp/ndrvm main.c
+	@cd assembler;$(CC) -o ../comp/ndrasm main.c
+	@cd parser;$(CC) -o ../comp/parser main.c
 
 build-vm: ## Build the virtual machine
 	@cd vm;gcc -o ../comp/ndrvm main.c
@@ -34,7 +47,7 @@ build-asm-run: ## Build assembler and run it
 
 ## Test
 test: ## Run tests of the project
-	@echo "Test"
+	@echo Test $(RNAME).as $(ARG)
 
 ## Clear
 clear: ## Clear compilation garbage

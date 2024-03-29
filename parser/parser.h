@@ -14,6 +14,8 @@ int ii = 0;
 int fs = 0; // firt instruction
 int data_addr = 100;
 
+
+
 int expression(lexer *l) {
   t = lexi(l);
 
@@ -26,7 +28,7 @@ int expression(lexer *l) {
   lexer_token_free(t);
   
   instruction_matrix[ii] = (char *)malloc(14 * sizeof(char));
-  sprintf(instruction_matrix[ii],"         HLT\n");
+  sprintf(instruction_matrix[ii],"    HLT\n");
   ii++;
 }
 
@@ -50,16 +52,28 @@ int expression_low(lexer *l) {
 
       if (fs == 0) {
         instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
-        sprintf(instruction_matrix[ii++],"   LDA $add%d\n",im-- -1);
+        sprintf(instruction_matrix[ii++],"    LDA $add%d\n",im-- -1);
         fs++;
       }
 
       instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
-      sprintf(instruction_matrix[ii++],"   ADD $add%d\n",im-- -1);
+      sprintf(instruction_matrix[ii++],"    ADD $add%d\n",im-- -1);
 
       break;
     case L_MINUS:
       printf("Symbol -\n");
+      if (fs == 0) {
+        instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
+        sprintf(instruction_matrix[ii++],"    LDA $add%d\n",im-- -1);
+        fs++;
+      }
+
+      instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
+      sprintf(instruction_matrix[ii++],"    NOT\n");
+      instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
+      sprintf(instruction_matrix[ii++],"    ADD $add%d\n",im-- -1);
+      instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
+      sprintf(instruction_matrix[ii++],"    NOT\n");
       break;
     }
   }
@@ -104,8 +118,8 @@ int factor(lexer *l) {
   }
 }
 
-void save() {
-  FILE *f = fopen("ASM.as","w");
+void save(char *outfname) {
+  FILE *f = fopen(outfname,"w");
 
   fwrite("ADDR\n", 5, sizeof(char), f);
     for (int i = 0; i < 10; i++) {
@@ -128,17 +142,10 @@ void save() {
   fwrite("TEXT\n", 5, sizeof(char), f);
     for (int i = 0; i < 10; i++) {
       if (instruction_matrix[i] != NULL)
-        fwrite(instruction_matrix[i], 13, sizeof(char), f);
+        fwrite(instruction_matrix[i], strlen(instruction_matrix[i]), sizeof(char), f);
         free(instruction_matrix[i]);
     }
   fwrite("END\n", 4, sizeof(char), f);
 
   fclose(f);
-}
-
-int main() {
-  char *d = "1 + 2 + 3 + 4";
-  lexer *l = lexer_create(d);
-  expression(l);
-  save();
 }
