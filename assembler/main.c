@@ -5,7 +5,11 @@
 #include "assembler.h"
 
 void help() {
-    printf("aaa\n");
+    printf(
+        "### Assemblr for Neander ###\n"
+        "./assmr [option...] <asm file>\n"
+        "-o <file name>.mem File where to write data.\n"
+    );
 }
 
 int main(int argc, char **argv) {

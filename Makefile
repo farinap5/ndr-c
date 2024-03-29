@@ -21,6 +21,8 @@ run: ## Build and run. Use FILE="math file".
 	@cd parser;$(CC) -o ../comp/parser main.c
 	@echo "#########-> Running Parser"
 	@comp/parser -f $(FILE) -o comp/$(RNAME).as
+	@echo "Built on " >> comp/$(RNAME).as
+	@date >> comp/$(RNAME).as
 	@echo "#########-> Running Assembler"
 	@comp/ndrasm comp/$(RNAME).as -o comp/$(RNAME).mem
 	@echo "#########-> Running Virtual Machine"
@@ -32,6 +34,17 @@ build: ## Build project and and link all files
 	@cd vm;$(CC) -o ../comp/ndrvm main.c
 	@cd assembler;$(CC) -o ../comp/ndrasm main.c
 	@cd parser;$(CC) -o ../comp/parser main.c
+
+## Run Build
+runb: ## Run a previous made build
+
+build-psr: ## Build the parser
+	@cd parser;$(CC) -o ../comp/parser main.c
+
+build-psr-run: ## Build the parser and run it against FILE="math file"
+	@cd parser;$(CC) -o ../comp/parser main.c
+	@comp/parser -f $(FILE) -o comp/$(RNAME).as
+
 
 build-vm: ## Build the virtual machine
 	@cd vm;gcc -o ../comp/ndrvm main.c
@@ -47,7 +60,21 @@ build-asm-run: ## Build assembler and run it
 
 ## Test
 test: ## Run tests of the project
-	@echo Test $(RNAME).as $(ARG)
+	@echo "-> Compiling"
+	@cd vm;$(CC) -o ../comp/ndrvm main.c
+	@cd assembler;$(CC) -o ../comp/ndrasm main.c
+	@cd parser;$(CC) -o ../comp/parser main.c
+	@echo "#########-> Running Parser"
+	@echo "5 + 5 + 5" > comp/$(RNAME).mth
+	@comp/parser -f comp/$(RNAME).mth -o comp/$(RNAME).as
+	@echo "Built on " >> comp/$(RNAME).as
+	@date >> comp/$(RNAME).as
+	@echo "#########-> Running Assembler"
+	@comp/ndrasm comp/$(RNAME).as -o comp/$(RNAME).mem
+	@echo "#########-> Running Virtual Machine"
+	@comp/ndrvm -f comp/$(RNAME).mem
+	@clear
+	@echo "No errors reported! COOL!"
 
 ## Clear
 clear: ## Clear compilation garbage
