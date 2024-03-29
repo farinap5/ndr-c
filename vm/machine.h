@@ -187,6 +187,9 @@ int run_machine_code(Machine m, int v) {
         return 1;
     }
   }
+
+  printf("\n");
+  Dump(&m);
   return 0;
 }
 

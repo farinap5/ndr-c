@@ -61,9 +61,6 @@ int main(int argc, char **argv) {
   if (run_machine_code(m, 2)) {
     printf("Exit with error.");
   }
-
-  printf("\n");
-  Dump(&m);
   
   return 0;
 }
