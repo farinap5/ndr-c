@@ -12,6 +12,7 @@
     0x06 = Asterisk
     0x07 = Slash
     0x08 = Expoent
+    0x09 = Number
 */
 
 struct token {

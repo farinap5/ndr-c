@@ -12,7 +12,14 @@
     0x06 = Asterisk
     0x07 = Slash
     0x08 = Expoent
+    0x09 = Number
 */
+
+struct lexer {
+    int index;
+    int len;
+    char *code;
+} typedef lexer;
 
 struct token {
     __uint8_t Type;
@@ -79,65 +86,85 @@ __uint8_t is_blank(char c) {
     }
 }
 
+lexer *lexer_create(char *code) {
+    lexer *l = (lexer *) malloc(sizeof(lexer));
+    l->index = 0;
+    l->len = strlen(code);
+    l->code = (char *) malloc(sizeof(char) * strlen(code));
+    strncpy(l->code, code, l->len);
+    return l;
+}
 
-
-token *lex(char *data) {
+token *lexi(char *data, lexer *l) {
     token *t = (token *)malloc(sizeof(token));
-    static char *buff;
-    if (data != NULL) buff = strdup(data);
-    if (buff == NULL) return NULL;
-
-    int slen = strlen(buff);
-
+    
+    l->len = strlen(l->code);
+    if (l->len <= l->index) {
+        t->Type;
+        return t;
+    }
     int i = 0;
-    while (is_blank(buff[0])) {
-        memmove(buff, buff + i, slen - i + 1);
+
+    while (is_blank(l->code[l->index])) {
+        memmove(l->code + l->index, l->code + l->index + 1, l->len - l->index);
         i++;
     }
 
-    i = 0;
-    if (is_digit(buff[0])) {
-        while (is_digit(buff[i])) {
-            i++;
-        }
+    if (is_digit(l->code[l->index])) {
+        i = 0;
+        
+        while (is_digit(l->code[i + l->index])) i++;
+
         t->Symbol = (char *)malloc(sizeof(char)*i);
-        strncpy(t->Symbol, buff, (size_t)i);
+        strncpy(t->Symbol, l->code + l->index, (size_t)i);
 
-        for (int j = 0; j < i; j++) {
-            memmove(buff, buff + 1, slen - j);
-        }
-
-        t->Type = 0x01;
+        l->index += i;
+        t->Type = 0x09;
         return t;
     }
 
-    if (is_op(buff[0])) {
-        t->Type = is_op(buff[0]);
+    if (is_op(l->code[l->index])) {
+        t->Type = is_op(l->code[l->index]);
         t->Symbol = (char *)malloc(sizeof(char));
-        strncpy(t->Symbol, buff, 1);
-        memmove(buff, buff + 1, slen - 1);
+        strncpy(t->Symbol, l->code + l->index, 1);
+        l->index++;
         return t;
     }
 
-    if (is_struct(buff[0])) {
-        t->Type = is_struct(buff[0]);
+    if (is_struct(l->code[l->index])) {
+        t->Type = is_struct(l->code[l->index]);
         t->Symbol = (char *)malloc(sizeof(char));
-        strncpy(t->Symbol, buff, 1);
-        memmove(buff, buff + 1, slen - 1);
+        strncpy(t->Symbol, l->code + l->index, 1);
+        l->index++;
         return t;
     }
-    
+
     t->Type = 0x00;
     return t;
 }
 
+void lexer_free(lexer *l) {
+    free(l->code);
+    free(l);
+}
+
+void lexer_token_free(token *t) {
+    free(t->Symbol);
+    free(t);
+}
+
 int main() {
-    char *data = "(11111 + 5) ";
-    token *t = lex(data);
-    t = lex(NULL);
-    t = lex(NULL);
-    t = lex(NULL);
-    t = lex(NULL);
-    t = lex(NULL);
+    char *data = "  (11111 + 5)";
+
+    lexer *l = lexer_create(data);
+    
+    token *t = lexi(data, l);
+    while (t->Type != 0) {
+        printf("Type %d Simble %s\n",t->Type, t->Symbol);
+        lexer_token_free(t);
+        t = lexi(data, l);
+    }
+    lexer_free(l);
+
     return 0;
 }
