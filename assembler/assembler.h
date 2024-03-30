@@ -141,13 +141,14 @@ __uint8_t *assembler(FILE *f, int v) {
                 } else if (strcmp(token, "AND") == 0) {
                     insCount += 2;
                 } else if (strcmp(token, "HLT") == 0) {
-                    insCount += 2;
+                    insCount += 1;
                 } else if (strcmp(token, "ADD") == 0) {
                     insCount += 2;
                 } else if (strcmp(token, "NOP") == 0) {
                     insCount += 1;
                 } else if (token[0] == ':') {
-                    int real_addrs = (insCount == 0) ? insCount : insCount + 1;
+                    //int real_addrs = (insCount == 0) ? insCount : insCount + 1;
+                    int real_addrs = insCount;
                     if (v>1)
                         printf("label %s to %d byte\n", token, real_addrs);
                     DBAdd(labelDB, token, real_addrs); // add the labels address to the database
@@ -292,8 +293,8 @@ __uint8_t *assembler(FILE *f, int v) {
                 } else if (strcmp(token, "JZ") == 0) {
                     __uint8_t addr;
                     token = strtok(NULL, " ");
-                    if (token[0] == '$') {
-                        addr = DBGet(defDB, token);
+                    if (token[0] == ':') {
+                        addr = DBGet(labelDB, token);
                         printf("    JZ %s=%02x\n", token, addr);
                     } else {
                         addr = (__uint8_t)strtol(token, NULL, 16);

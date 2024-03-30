@@ -10,6 +10,11 @@ Expression -> <Term> (+-) <Term> | <Term>
 - http://docs.fct.unesp.br/docentes/dmec/olivete/compiladores/arquivos/Aula5.pdf
 - http://docs.fct.unesp.br/docentes/dmec/olivete/compiladores/
 
+Atialmente a multiplicação apenas funciona caso a multiplicação esteja ao fina:
+
+```
+1 + 4 + 3 * 2
+```
 
 ```
 11 + 5
@@ -19,7 +24,7 @@ db 5 $end2
 
 LDA $end2
 ADD $end1
-STA $end3
+STA $end2
 HLT
 ```
 
@@ -70,6 +75,34 @@ TEXT
 
     LDA $add0
     ADD $add1
+    HLT
+END
+```
+
+```
+ADDR
+    c0 $add0
+    c1 $add1
+END
+
+DATA
+    02 $add0
+    03 $add1
+END
+
+TEXT
+    :p1
+    LDA $add0
+    ADD $add0
+    STA $add0
+
+    LDA x=0
+    ADD y=1
+
+    NOT
+    ADD $add1
+    JN :p1
+    STA $add0
     HLT
 END
 ```

@@ -125,7 +125,7 @@ void JN(Machine *machine) {
 void JZ(Machine* machine) {
   printf(" JZ  ");
   machine->pc++;
-  if (machine->ac == 0) {
+  if (machine->ac == 0xff) {
     printf("from %02x to %02x\n",machine->pc, machine->mem[machine->pc]);
     machine->pc = machine->mem[machine->pc];
   } else {
