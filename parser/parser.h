@@ -8,11 +8,11 @@ int factor(lexer *l);
 token *t;
 char *addr_matrix[10];
 char *data_addr_matrix[10];
-char *instruction_matrix[32];
+char *instruction_matrix[100];
 int im = 0;
 int ii = 0;
 int fs = 0; // firt instruction
-int data_addr = 100;
+int data_addr = 192;
 
 
 
@@ -29,6 +29,7 @@ int expression(lexer *l) {
   
   instruction_matrix[ii] = (char *)malloc(14 * sizeof(char));
   sprintf(instruction_matrix[ii],"    HLT\n");
+  printf("batata!");
   ii++;
 }
 
@@ -42,6 +43,7 @@ int expression_low(lexer *l) {
   
 
   if (t->Type == L_PLUS || t->Type == L_MINUS) {
+    int aux1,aux2 = 0;
     token *old = t;
     t = lexi(l);
     expression_low(l);
@@ -49,31 +51,39 @@ int expression_low(lexer *l) {
     switch (old->Type) {
     case L_PLUS:
       printf("Symbol +\n");
-
-      if (fs == 0) {
-        instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
-        sprintf(instruction_matrix[ii++],"    LDA $add%d\n",im-- -1);
-        fs++;
-      }
+      aux1 = im-- -1;
+      aux2 = im-- -1;
+      
+      instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
+      sprintf(instruction_matrix[ii++],"    LDA $add%d\n",aux2);
+      fs++;
 
       instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
-      sprintf(instruction_matrix[ii++],"    ADD $add%d\n",im-- -1);
+      sprintf(instruction_matrix[ii++],"    ADD $add%d\n",aux1);
+
+      instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
+      sprintf(instruction_matrix[ii++],"    STA $add%d\n",aux2);
+      im++;
 
       break;
     case L_MINUS:
       printf("Symbol -\n");
-      if (fs == 0) {
-        instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
-        sprintf(instruction_matrix[ii++],"    LDA $add%d\n",im-- -1);
-        fs++;
-      }
+      aux1 = im-- -1;
+      aux2 = im-- -1;
+      
+      instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
+      sprintf(instruction_matrix[ii++],"    LDA $add%d\n",aux2);
 
       instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
       sprintf(instruction_matrix[ii++],"    NOT\n");
       instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
-      sprintf(instruction_matrix[ii++],"    ADD $add%d\n",im-- -1);
+      sprintf(instruction_matrix[ii++],"    ADD $add%d\n",aux1);
       instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
       sprintf(instruction_matrix[ii++],"    NOT\n");
+
+      instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
+      sprintf(instruction_matrix[ii++],"    STA $add%d\n",aux2);
+      im++;
       break;
     }
   }
@@ -140,7 +150,7 @@ void save(char *outfname) {
 
 
   fwrite("TEXT\n", 5, sizeof(char), f);
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 100; i++) {
       if (instruction_matrix[i] != NULL)
         fwrite(instruction_matrix[i], strlen(instruction_matrix[i]), sizeof(char), f);
         free(instruction_matrix[i]);

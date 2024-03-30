@@ -52,3 +52,24 @@ ADD $end1
 STA $end5
 HLT
 ```
+
+
+---
+
+```
+TEXT
+    LDA $add2
+    ADD $add3
+    STA $add2
+
+    LDA $add1
+    NOT
+    ADD $add2
+    NOT
+    STA $add1
+
+    LDA $add0
+    ADD $add1
+    HLT
+END
+```
