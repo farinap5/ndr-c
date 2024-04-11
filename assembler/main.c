@@ -15,7 +15,7 @@ void help() {
 int main(int argc, char **argv) {
     FILE *f;
     FILE *out;
-    __uint8_t magic[4] = {0x03, 0xae, 0x44, 0x54};
+    __uint8_t magic[4] = {0x03, 0x4e, 0x44, 0x52};
     char *foutname = "out.mem";
     char *fname = "assembly.as";
 

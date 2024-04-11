@@ -10,10 +10,10 @@ char *addr_matrix[32];
 char *data_addr_matrix[32];
 char *instruction_matrix[100];
 
-int imm = 0;//
-int im = 0; //
-int ii = 0; // 
-int fs = 0; // firt instruction
+int imm = 0; //
+int im = 0;  //
+int ii = 0;  // 
+int fs = 0;  // firt instruction
 int label_index = 1;
 int data_addr = 192;
 

@@ -11,7 +11,7 @@
     It retunts the memory.
 */
 __uint8_t *assembler(FILE *f, int v) {
-    __uint8_t magic[4] = {0x03, 0xae, 0x44, 0x54};
+    __uint8_t magic[4] = {0x03, 0x4e, 0x44, 0x52};
     
     /*
         Database to hold the defs where 
