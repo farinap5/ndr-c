@@ -13,7 +13,7 @@ Expression -> <Term> (+-) <Term> | <Term>
 Atialmente a multiplicação apenas funciona caso a multiplicação esteja ao fina:
 
 ```
-1 + 4 + 3 * 2
+1 + 4 + 2 * 2
 ```
 
 ```

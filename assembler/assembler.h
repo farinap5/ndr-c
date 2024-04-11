@@ -147,7 +147,6 @@ __uint8_t *assembler(FILE *f, int v) {
                 } else if (strcmp(token, "NOP") == 0) {
                     insCount += 1;
                 } else if (token[0] == ':') {
-                    //int real_addrs = (insCount == 0) ? insCount : insCount + 1;
                     int real_addrs = insCount;
                     if (v>1)
                         printf("label %s to %d byte\n", token, real_addrs);

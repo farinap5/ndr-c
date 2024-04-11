@@ -9,13 +9,13 @@ token *t;
 char *addr_matrix[32];
 char *data_addr_matrix[32];
 char *instruction_matrix[100];
-int imm = 0;
-int im = 0;
-int ii = 0;
+
+int imm = 0;//
+int im = 0; //
+int ii = 0; // 
 int fs = 0; // firt instruction
+int label_index = 1;
 int data_addr = 192;
-
-
 
 int expression(lexer *l) {
   t = lexi(l);
@@ -104,9 +104,13 @@ int expression_high(lexer *l) {
       printf("Symbol *\n");
       aux1 = im-- -1;
       aux2 = im-- -1;
+
+      int aux_lb1 = label_index++;
+      int aux_lb2 = label_index++;
+
       
       instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
-      sprintf(instruction_matrix[ii++],"    :p1\n");
+      sprintf(instruction_matrix[ii++],"    :p%d\n",aux_lb1);
 
       instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
       sprintf(instruction_matrix[ii++],"    LDA fc\n");
@@ -133,13 +137,13 @@ int expression_high(lexer *l) {
       sprintf(instruction_matrix[ii++],"    ADD $add%d\n",aux1);
 
       instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
-      sprintf(instruction_matrix[ii++],"    JZ :p2\n");
+      sprintf(instruction_matrix[ii++],"    JZ :p%d\n",aux_lb2);
 
       instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
-      sprintf(instruction_matrix[ii++],"    JMP :p1\n");
+      sprintf(instruction_matrix[ii++],"    JMP :p%d\n",aux_lb1);
 
       instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
-      sprintf(instruction_matrix[ii++],"    :p2\n");
+      sprintf(instruction_matrix[ii++],"    :p%d\n", aux_lb2);
 
       instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
       sprintf(instruction_matrix[ii++],"    STA fa\n");
