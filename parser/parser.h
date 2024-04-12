@@ -137,7 +137,7 @@ int expression_high(lexer *l) {
       sprintf(instruction_matrix[ii++],"    ADD $add%d\n",aux1);
 
       instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
-      sprintf(instruction_matrix[ii++],"    JZ :p%d\n",aux_lb2);
+      sprintf(instruction_matrix[ii++],"    JN :p%d\n",aux_lb2);
 
       instruction_matrix[ii] = (char *)malloc(16 * sizeof(char));
       sprintf(instruction_matrix[ii++],"    JMP :p%d\n",aux_lb1);
