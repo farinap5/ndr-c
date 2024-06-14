@@ -14,7 +14,7 @@ Help Menu
    Use `-a 10` (default: 0)
 ```
 
-When running the machine using high verbose mode, many lines will go to the output for debugging. Each two lines refer to the state of the machine in that situation. The frist line presents the memory, the place where `pc` is pointing to,a dn its surrouding bytes. The second line shows the registers and the instruction in assembly.
+When running the machine using high verbose mode, many lines will go to the output for debugging. Each two lines refer to the state of the machine for that cicle. The frist line presents the memory, the place where `pc` is pointing to, adn its surrouding bytes. The second line shows the registers and the instruction in assembly.
 
 ```
 20 80 10 81 <30> 81 40 80 50 
