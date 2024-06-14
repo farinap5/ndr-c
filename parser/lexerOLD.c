@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "lexerOLD.h"
+
 /*
     0x00 = nop
     0x01 = Open Parentesis
@@ -17,7 +19,7 @@
 struct token {
     __uint8_t Type;
     char *Symbol;
-} typedef token;
+};
 
 __uint8_t is_struct(char c) {
     switch (c) {
@@ -81,8 +83,8 @@ __uint8_t is_blank(char c) {
 
 
 
-token *lex(char *data) {
-    token *t = (token *)malloc(sizeof(token));
+Token lex(char *data) {
+    Token t = (Token)malloc(sizeof(t));
     static char *buff;
     if (data != NULL) buff = strdup(data);
     if (buff == NULL) return NULL;
@@ -133,11 +135,17 @@ token *lex(char *data) {
 
 int main() {
     char *data = "(11111 + 5) ";
-    token *t = lex(data);
+    Token t = lex(data);
+    printf("Simble: %s Code: %d\n", t->Symbol, t->Type);
     t = lex(NULL);
+    printf("Simble: %s Code: %d\n", t->Symbol, t->Type);
     t = lex(NULL);
+    printf("Simble: %s Code: %d\n", t->Symbol, t->Type);
     t = lex(NULL);
+    printf("Simble: %s Code: %d\n", t->Symbol, t->Type);
     t = lex(NULL);
+    printf("Simble: %s Code: %d\n", t->Symbol, t->Type);
     t = lex(NULL);
+    printf("Simble: %s Code: %d\n", t->Symbol, t->Type);
     return 0;
 }
