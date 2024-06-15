@@ -2,6 +2,9 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "lexer.h"
+#include "parser.h"
+
 /*
     0x00 = nop
     0x01 = Open Parentesis
@@ -13,14 +16,14 @@
     0x07 = Slash
     0x08 = Expoent
     0x09 = Number
-*/
 
-#define L_NOP 0x00
-#define L_PLUS 0x04
-#define L_MINUS 0x05
-#define L_ASTERISK 0x06
-#define L_SLASH 0x07
-#define L_DIGIT 0x09
+    #define L_NOP 0x00
+    #define L_PLUS 0x04
+    #define L_MINUS 0x05
+    #define L_ASTERISK 0x06
+    #define L_SLASH 0x07
+    #define L_DIGIT 0x09
+*/
 
 struct lexer {
     int index;
@@ -93,8 +96,8 @@ __uint8_t is_blank(char c) {
     }
 }
 
-lexer *lexer_create(char *code) {
-    lexer *l = (lexer *) malloc(sizeof(lexer));
+Lexer lexer_create(char *code) {
+    Lexer l = (Lexer) malloc(sizeof(l));
     l->index = 0;
     l->len = strlen(code);
     l->code = (char *) malloc(sizeof(char) * strlen(code));
@@ -102,8 +105,8 @@ lexer *lexer_create(char *code) {
     return l;
 }
 
-token *lexi(lexer *l) {
-    token *t = (token *)malloc(sizeof(token));
+Token lexi(Lexer l) {
+    Token t = (Token)malloc(sizeof(t));
     
     l->len = strlen(l->code);
     if (l->len <= l->index) {
@@ -150,12 +153,20 @@ token *lexi(lexer *l) {
     return t;
 }
 
-void lexer_free(lexer *l) {
+void lexer_free(Lexer l) {
     free(l->code);
     free(l);
 }
 
-void lexer_token_free(token *t) {
+void lexer_token_free(Token t) {
     free(t->Symbol);
     free(t);
+}
+
+char *lexer_get_symbol(Token t) {
+    return t->Symbol;
+}
+
+unsigned char lexer_get_type(Token t) {
+    return t->Type;
 }

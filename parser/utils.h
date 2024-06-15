@@ -5,7 +5,7 @@
 
 void help() {
     printf(
-        "### Math Parser ###"
+        "### Math Parser ###\n"
         "-f <name> Filename to read equation.\n"
         "-o <name> Output file.\n"
     );

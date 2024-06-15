@@ -8,6 +8,8 @@
                 "-fdiagnostics-color=always",
                 "-g",
                 "${file}",
+                "parser.c",
+                "lexer.c",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],

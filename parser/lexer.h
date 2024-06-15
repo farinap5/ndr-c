@@ -1,6 +1,5 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#ifndef LEXER_H
+#define LEXER_H
 
 /*
     0x00 = nop
@@ -22,67 +21,14 @@
 #define L_SLASH 0x07
 #define L_DIGIT 0x09
 
-struct lexer {
-    int index;
-    int len;
-    char *code;
-} typedef lexer;
+typedef struct lexer *Lexer;
+typedef struct token *Token;
 
-struct token {
-    __uint8_t Type;
-    char *Symbol;
-} typedef token;
+Lexer lexer_create(char *code);
+Token lexi(Lexer l);
+void lexer_free(Lexer l);
+void lexer_token_free(Token t);
+unsigned char lexer_get_type(Token t);
+char *lexer_get_symbol(Token t);
 
-__uint8_t is_struct(char c) {
-    switch (c) {
-        case '(':
-            return 0x01;
-        case ')':
-            return 0x02;
-        default:
-            return 0;
-    }
-}
-
-__uint8_t is_op(char c) {
-    switch (c) {
-        case '+':
-            return 0x04;
-        case '-':
-            return 0x05;
-        case '*':
-            return 0x06;
-        case '/':
-            return 0x07;
-        case '=':
-            return 0x03;
-        case '^':
-            return 0x08;
-        default:
-            return 0;
-    }
-}
-
-__uint8_t is_digit(char c) {
-    switch (c) {
-        case '0':
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':
-            return 1;
-        default:
-            return 0;
-    }
-}
-
-__uint8_t is_blank(char c);
-lexer *lexer_create(char *code);
-token *lexi(lexer *l);
-void lexer_free(lexer *l);
-void lexer_token_free(token *t);
+#endif // LEXER_H

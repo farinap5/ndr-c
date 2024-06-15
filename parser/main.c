@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #include "utils.h"
 #include "parser.h"
@@ -31,7 +32,7 @@ int main(int argc, char **argv) {
   }
   fgets(d, 100, fptr);
 
-  lexer *l = lexer_create(d);
-  expression(l);
-  save(outfname);
+  Lexer l = lexer_create(d);
+  parser_expression(l);
+  parser_save(outfname);
 }
