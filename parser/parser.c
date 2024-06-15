@@ -19,10 +19,15 @@ char *instruction_matrix[100];
 
 // Index used of the matrix above when creating new entries.
 int imm = 0; //
+
 int im = 0;  //
 int ii = 0;  // 
 int fs = 0;  // firt instruction
 int label_index = 1;
+
+// The data address, where data are stored
+// If instructions are overwriting data section
+// increse this number
 int data_addr = 192;
 
 int parser_expression(Lexer l) {
@@ -213,6 +218,7 @@ void parser_save(char *outfname) {
 
 
   fwrite("DATA\n", 5, sizeof(char), f);
+  // These bytes are defined and used when running loops when mul is called.
   fwrite("    0 fa\n", 9, sizeof(char), f);
   fwrite("    1 fb\n", 9, sizeof(char), f);
   fwrite("    0 fc\n", 9, sizeof(char), f);
