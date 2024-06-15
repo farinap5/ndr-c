@@ -1,8 +1,15 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "utils.h"
 #include "parser.h"
+
+void help() {
+    printf(
+        "### Math Parser ###\n"
+        "-f <name> Filename to read equation.\n"
+        "-o <name> Output file.\n"
+    );
+}
 
 int main(int argc, char **argv) {
   char *fname = "math.mth";

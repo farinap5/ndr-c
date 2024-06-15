@@ -18,7 +18,7 @@ run: ## Build and run. Use FILE="math file".
 	@echo "-> Compiling"
 	@cd vm;$(CC) -o ../comp/ndrvm main.c
 	@cd assembler;$(CC) -o ../comp/ndrasm main.c
-	@cd parser;$(CC) -o ../comp/parser main.c
+	@cd parser;$(CC) -o ../comp/parser main.c parser.c lexer.c
 	@echo "#########-> Running Parser"
 	@comp/parser -f $(FILE) -o comp/$(RNAME).as
 	@echo "Built on " >> comp/$(RNAME).as
@@ -33,13 +33,13 @@ run: ## Build and run. Use FILE="math file".
 build: ## Build project and and link all files 
 	@cd vm;$(CC) -o ../comp/ndrvm main.c
 	@cd assembler;$(CC) -o ../comp/ndrasm main.c
-	@cd parser;$(CC) -o ../comp/parser main.c
+	@cd parser;$(CC) -o ../comp/parser main.c parser.c lexer.c
 
 ## Run Build
 runb: ## Run a previous made build
 
 build-psr: ## Build the parser
-	@cd parser;$(CC) -o ../comp/parser main.c
+	@cd parser;$(CC) -o ../comp/parser main.c parser.c lexer.c
 
 build-psr-run: ## Build the parser and run it against FILE="math file"
 	@cd parser;$(CC) -o ../comp/parser main.c
@@ -47,23 +47,23 @@ build-psr-run: ## Build the parser and run it against FILE="math file"
 
 
 build-vm: ## Build the virtual machine
-	@cd vm;gcc -o ../comp/ndrvm main.c
+	@cd vm;$(CC) -o ../comp/ndrvm main.c
 
 build-vm-run: ## Build the virtual machine and run it
-	@cd vm;gcc -o ../comp/ndrvm main.c && ../comp/ndrvm
+	@cd vm;$(CC) -o ../comp/ndrvm main.c && ../comp/ndrvm
 
 build-asm: ## Build assembler
-	@cd assembler;gcc -o ../comp/ndrasm main.c
+	@cd assembler;$(CC) -o ../comp/ndrasm main.c
 
 build-asm-run: ## Build assembler and run it
-	@cd assembler;gcc -o ../comp/ndrasm main.c && ../comp/ndrasm
+	@cd assembler;$(CC) -o ../comp/ndrasm main.c && ../comp/ndrasm
 
 ## Test
 test: ## Run tests of the project
 	@echo "-> Compiling"
 	@cd vm;$(CC) -o ../comp/ndrvm main.c
 	@cd assembler;$(CC) -o ../comp/ndrasm main.c
-	@cd parser;$(CC) -o ../comp/parser main.c
+	@cd parser;$(CC) -o ../comp/parser main.c parser.c lexer.c
 	@echo "#########-> Running Parser"
 	@echo "5 + 5 + 5" > comp/$(RNAME).mth
 	@comp/parser -f comp/$(RNAME).mth -o comp/$(RNAME).as
