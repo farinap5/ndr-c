@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "assembler.h"
+#include "utils.h"
 
 void help() {
     printf(
