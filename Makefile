@@ -17,7 +17,7 @@ all: help
 run: ## Build and run. Use FILE="math file".
 	@echo "-> Compiling"
 	@cd vm;$(CC) -o ../comp/ndrvm main.c
-	@cd assembler;$(CC) -o ../comp/ndrasm main.c
+	@cd assembler;$(CC) -o ../comp/ndrasm main.c assembler.c utils.c
 	@cd parser;$(CC) -o ../comp/parser main.c parser.c lexer.c
 	@echo "#########-> Running Parser"
 	@comp/parser -f $(FILE) -o comp/$(RNAME).as
@@ -32,7 +32,7 @@ run: ## Build and run. Use FILE="math file".
 ## Build
 build: ## Build project and and link all files 
 	@cd vm;$(CC) -o ../comp/ndrvm main.c
-	@cd assembler;$(CC) -o ../comp/ndrasm main.c
+	@cd assembler;$(CC) -o ../comp/ndrasm main.c assembler.c utils.c
 	@cd parser;$(CC) -o ../comp/parser main.c parser.c lexer.c
 
 ## Run Build
@@ -53,7 +53,7 @@ build-vm-run: ## Build the virtual machine and run it
 	@cd vm;$(CC) -o ../comp/ndrvm main.c && ../comp/ndrvm
 
 build-asm: ## Build assembler
-	@cd assembler;$(CC) -o ../comp/ndrasm main.c
+	@cd assembler;$(CC) -o ../comp/ndrasm main.c assembler.c utils.c
 
 build-asm-run: ## Build assembler and run it
 	@cd assembler;$(CC) -o ../comp/ndrasm main.c && ../comp/ndrasm
@@ -61,8 +61,8 @@ build-asm-run: ## Build assembler and run it
 ## Test
 test: ## Run tests of the project
 	@echo "-> Compiling"
-	@cd vm;$(CC) -o ../comp/ndrvm main.c
-	@cd assembler;$(CC) -o ../comp/ndrasm main.c
+	@cd vm;$(CC) -o ../comp/ndrvm main.c 
+	@cd assembler;$(CC) -o ../comp/ndrasm main.c assembler.c utils.c
 	@cd parser;$(CC) -o ../comp/parser main.c parser.c lexer.c
 	@echo "#########-> Running Parser"
 	@echo "5 + 5 + 5" > comp/$(RNAME).mth
