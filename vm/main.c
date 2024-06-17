@@ -19,7 +19,7 @@ void help() {
 }
 
 int main(int argc, char **argv) {
-  Machine m = {.ac = 0, .pc = 0};
+  uint8_t ac = 0, pc = 0;
   char head[4];
   char *fname = "ndr-test.mem";
 
@@ -32,15 +32,15 @@ int main(int argc, char **argv) {
         fname = argv[i];
     } else if (strcmp("-p", argv[i]) == 0 || strcmp("--pc", argv[i]) == 0) {
         i++;
-        m.pc = (uint8_t)atoi(argv[i]);
+        pc = (uint8_t)atoi(argv[i]);
     } else if (strcmp("-a", argv[i]) == 0 || strcmp("--ac", argv[i]) == 0) {
         i++;
-        m.ac = (uint8_t)atoi(argv[i]);
+        ac = (uint8_t)atoi(argv[i]);
     }
   }
 
   printf("-- Neader Virtual Machine --\n\n");
-  printf("AC: %02x   PC: %02x\n\n", m.ac, m.pc);
+  printf("AC: %02x   PC: %02x\n\n", ac, pc);
 
   FILE *file;
   file = fopen(fname, "rb");
@@ -49,13 +49,15 @@ int main(int argc, char **argv) {
     return 1;
   }
 
+  Machine *m = machine_init(ac, pc);
+
   fread(head, sizeof(char), 4, file);
   for(int i = 0; i < 256; i++) {
     uint16_t data;
     fread(&data, sizeof(uint16_t), 1, file);
-    m.mem[i] = (uint8_t)data;  
+    machine_set_mem(m, i, (uint8_t)data);  
   }
-  fclose(file);
+  //fclose(file);
   
   // call the machine
   if (run_machine_code(m, 2)) {
