@@ -14,11 +14,7 @@ NM="ndrc"
 all: help
 
 ## Run
-run: ## Build and run. Use FILE="math file".
-	@echo "-> Compiling"
-	@cd vm;$(CC) -o ../comp/ndrvm main.c machine.c
-	@cd assembler;$(CC) -o ../comp/ndrasm main.c assembler.c utils.c
-	@cd parser;$(CC) -o ../comp/parser main.c parser.c lexer.c
+run: build ## Build and run. Use FILE="math file".
 	@echo "#########-> Running Parser"
 	@comp/parser -f $(FILE) -o comp/$(RNAME).as
 	@echo "Built on " >> comp/$(RNAME).as
@@ -30,10 +26,7 @@ run: ## Build and run. Use FILE="math file".
 	
 
 ## Build
-build: ## Build project and and link all files 
-	@cd vm;$(CC) -o ../comp/ndrvm main.c machine.c
-	@cd assembler;$(CC) -o ../comp/ndrasm main.c assembler.c utils.c
-	@cd parser;$(CC) -o ../comp/parser main.c parser.c lexer.c
+build: build-psr build-vm build-asm ## Build project and and link all files 
 
 ## Run Build
 runb: ## Run a previous made build
@@ -41,29 +34,24 @@ runb: ## Run a previous made build
 build-psr: ## Build the parser
 	@cd parser;$(CC) -o ../comp/parser main.c parser.c lexer.c
 
-build-psr-run: ## Build the parser and run it against FILE="math file"
-	@cd parser;$(CC) -o ../comp/parser main.c parser.c lexer.c
-	@comp/parser -f $(FILE) -o comp/$(RNAME).as
+build-psr-run: build-psr ## Build the parser and run it against FILE="math file"
+	@cd parser; comp/parser -f $(FILE) -o comp/$(RNAME).as
 
 
 build-vm: ## Build the virtual machine
 	@cd vm;$(CC) -o ../comp/ndrvm main.c machine.c
 
-build-vm-run: ## Build the virtual machine and run it
-	@cd vm;$(CC) -o ../comp/ndrvm main.c machine.c && ../comp/ndrvm
+build-vm-run: build-vm ## Build the virtual machine and run it
+	@cd vm; ../comp/ndrvm
 
 build-asm: ## Build assembler
 	@cd assembler;$(CC) -o ../comp/ndrasm main.c assembler.c utils.c
 
-build-asm-run: ## Build assembler and run it
-	@cd assembler;$(CC) -o ../comp/ndrasm main.c && ../comp/ndrasm
+build-asm-run: build-asm ## Build assembler and run it
+	@cd assembler; ../comp/ndrasm
 
 ## Test
-test: ## Run tests of the project
-	@echo "-> Compiling"
-	@cd vm;$(CC) -o ../comp/ndrvm main.c machine.c
-	@cd assembler;$(CC) -o ../comp/ndrasm main.c assembler.c utils.c
-	@cd parser;$(CC) -o ../comp/parser main.c parser.c lexer.c
+test: build ## Run tests of the project
 	@echo "#########-> Running Parser"
 	@echo "5 + 5 + 5" > comp/$(RNAME).mth
 	@comp/parser -f comp/$(RNAME).mth -o comp/$(RNAME).as
@@ -75,6 +63,7 @@ test: ## Run tests of the project
 	@comp/ndrvm -f comp/$(RNAME).mem
 	@clear
 	@echo "No errors reported! COOL!"
+	@rm comp/*
 
 ## Clear
 clear: ## Clear compilation garbage
