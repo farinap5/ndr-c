@@ -5,6 +5,8 @@
 #include "assembler.h"
 #include "utils.h"
 
+__attribute__((section("rodata"))) char hello[] = "hello";
+
 void help() {
     printf(
         "### Assemblr for Neander ###\n"

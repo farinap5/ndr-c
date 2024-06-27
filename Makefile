@@ -45,7 +45,7 @@ build-vm-run: build-vm ## Build the virtual machine and run it
 	@cd vm; ../comp/ndrvm
 
 build-asm: ## Build assembler
-	@cd assembler;$(CC) -o ../comp/ndrasm main.c assembler.c utils.c
+	@cd assembler;$(CC) -o ../comp/ndrasm main.c assembler.c utils.c table/table.c table/LL.c
 
 build-asm-run: build-asm ## Build assembler and run it
 	@cd assembler; ../comp/ndrasm
