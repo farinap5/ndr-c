@@ -1,14 +1,15 @@
-#include "LL.h"
-#include "table.h"
 #include <stdlib.h>
 #include <string.h>
 
+#include "LL.h"
+#include "table.h"
+
 struct kvdb {
-  struct Node *initNode;
+  Node initNode;
 };
 
 KVDB DBInit() {
-  KVDB db = (KVDB)malloc(sizeof db);
+  KVDB db = (KVDB)malloc(sizeof(struct kvdb));
   db->initNode = LLInit();
   return db;
 }
@@ -18,6 +19,6 @@ int DBAdd(KVDB db, char *key, __uint8_t value) {
 }
 
 __uint8_t DBGet(KVDB db, char *key) {
-  struct Node *node = LLGet(db->initNode, key);
-  return node->value;
+  Node node = LLGet(db->initNode, key);
+  return LLGet_Value(node);
 }
