@@ -1,23 +1,11 @@
-#pragma once
-#include "LL.h"
-#include <stdlib.h>
-#include <string.h>
+#ifndef TABLE_H
+#define TABLE_H
 
-struct KVDB {
-  struct Node *initNode;
-};
+typedef unsigned char __uint8_t;
+typedef struct kvdb *KVDB;
 
-struct KVDB DBInit() {
-  struct KVDB db;
-  db.initNode = LLInit();
-  return db;
-}
+KVDB DBInit();
+int DBAdd(KVDB db, char *key, __uint8_t value);
+__uint8_t DBGet(KVDB db, char *key);
 
-int DBAdd(struct KVDB db, char *key, __uint8_t value) {
-  return LLAdd(db.initNode, key, value);
-}
-
-__uint8_t DBGet(struct KVDB db, char *key) {
-  struct Node *node = LLGet(db.initNode, key);
-  return node->value;
-}
+#endif // TABLE_H

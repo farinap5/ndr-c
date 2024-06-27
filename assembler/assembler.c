@@ -18,13 +18,13 @@ __uint8_t *assembler(FILE *f, int v) {
         Database to hold the defs where: 
         $var (a variable with arbitrary name) = 0x10 (a arbitrary address)
     */
-    struct KVDB defDB = DBInit();
+    KVDB defDB = DBInit();
 
     /*
         Database to hold the labels where:
         :label (a label with arbitrary name) = 0x10 (automatically defined address)
     */
-    struct KVDB labelDB = DBInit();
+    KVDB labelDB = DBInit();
     
     __uint8_t *mem = (__uint8_t *)malloc(sizeof(__uint8_t) * 256);
     for (int i = 0; i < 256; i++) {
