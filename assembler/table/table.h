@@ -7,5 +7,6 @@ typedef struct kvdb *KVDB;
 KVDB DBInit();
 int DBAdd(KVDB db, char *key, __uint8_t value);
 __uint8_t DBGet(KVDB db, char *key);
+void DBFree(KVDB db);
 
 #endif // TABLE_H

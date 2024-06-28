@@ -22,3 +22,8 @@ __uint8_t DBGet(KVDB db, char *key) {
   Node node = LLGet(db->initNode, key);
   return LLGet_Value(node);
 }
+
+void DBFree(KVDB db) {
+  LL_Free(db->initNode);
+  free(db);
+}
