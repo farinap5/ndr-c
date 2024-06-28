@@ -62,6 +62,31 @@ Node LLGet(Node list, char *key) {
 __uint8_t LLGet_Value(Node node) {
     return node->value;
 }
+
+void LL_Free(Node list) {
+  if (list == NULL) {
+    return;
+  }
+
+  Node aux = list;
+  Node frr = list;
+
+  while (aux != NULL) {
+    frr = aux;
+    aux = aux->next;
+    if (frr != NULL) {
+      if (frr->key != NULL) {
+        free(frr->key);
+      }
+
+      if (frr->value != 0x00) {
+        frr->value = 0x00;
+      }
+    }
+  }
+  return 0;
+}
+
 /*int LLDel(struct Node *list, char *key) {
 
 }*/
