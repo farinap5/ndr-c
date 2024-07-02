@@ -190,15 +190,17 @@ int expression_high(Lexer l) {
 
 int parentesis(Lexer l) {
   if (lexer_get_type(t) == L_OPEN) {
+    printf("Open parentesis\n");
     t = lexi(l);
     expression_low(l);
     if (lexer_get_type(t) != L_CLOSE) {
       printf("no close statement");
       return 0;
     }
-  } else {
+    printf("Close parentesis\n");
+    t = lexi(l);
+  } else
     factor(l);
-  }
 }
 
 int factor(Lexer l) {
