@@ -74,6 +74,6 @@ TEXT
     HLT
 END
 ```
-`TEXT` section has the assembly code. It consumes the addresses or labels. Jump instructions may use labels as well. Take a look at (neander)[https://www.inf.ufrgs.br/arq/wiki/doku.php?id=neander] and `ndr-c/assembler/assembler.c` for all instructions.
+`TEXT` section has the assembly code. It consumes the addresses or labels. Jump instructions may use labels as well. Take a look at [neander](https://www.inf.ufrgs.br/arq/wiki/doku.php?id=neander) and `ndr-c/assembler/assembler.c` for all instructions.
 
 The order of the sections must be preserved.
