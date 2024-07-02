@@ -8,7 +8,7 @@
                 "-fdiagnostics-color=always",
                 "-g",
                 "${file}",
-                "assembler.c", "utils.c", "table/table.c", "table/LL.c",
+                "parser.c", "lexer.c",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],

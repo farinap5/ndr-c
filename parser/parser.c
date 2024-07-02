@@ -105,7 +105,7 @@ int expression_low(Lexer l) {
   * and /
 */
 int expression_high(Lexer l) {
-  factor(l);
+  parentesis(l);
   if (lexer_get_type(t) == L_ASTERISK || lexer_get_type(t) == L_SLASH) {
     int aux1,aux2 = 0;
     Token old = t;
@@ -186,6 +186,19 @@ int expression_high(Lexer l) {
       break;
     }
   } 
+}
+
+int parentesis(Lexer l) {
+  if (lexer_get_type(t) == L_OPEN) {
+    t = lexi(l);
+    expression_low(l);
+    if (lexer_get_type(t) != L_CLOSE) {
+      printf("no close statement");
+      return 0;
+    }
+  } else {
+    factor(l);
+  }
 }
 
 int factor(Lexer l) {

@@ -15,6 +15,8 @@
 */
 
 #define L_NOP 0x00
+#define L_OPEN 0x01
+#define L_CLOSE 0x02
 #define L_PLUS 0x04
 #define L_MINUS 0x05
 #define L_ASTERISK 0x06
