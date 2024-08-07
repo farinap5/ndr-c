@@ -1,5 +1,13 @@
 # Neander Machine
 
+This project is a study on compilers. Here, a custom processor architecture is defined, along with a set of custom machine language instructions. In addition to the virtual machine, there is the compiler, which is capable of recognizing and compiling a simple grammar of mathematical expressions.
+
+This project attempts to answer some questions such as:
+
+1. How can I perform certain mathematical expressions without using stack memory and with a very limited set of instructions?
+2. How can I generate code from a parser?
+3. How can I create an efficient virtual machine?
+
 This project contains:
 
 - Compiler/parser
